@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8"/>
+		<title> demo myData </title>
+		<script>
+		function Start(){
+			var myData = [
+			2445,
+			{
+				locations:["Idaho","New York","London"],
+				item:[
+					{name: "monitor",price:229.99},
+					{name: "Keyboard",price:19.99}
+					],
+					calculate: function (a,b){return a + b;}
+			},
+			[11,22,33],
+			{
+				employees: [
+					{name: "John, smith",price:46},
+					{name: "Elizabeth, McKlay",age:41}
+				],
+				getBirthYear: function(age){return (new myData().getFullYear()-age);},
+				codes:[11,56,7655,3444,67,888,100],
+				tag:{
+					name: "A1",
+					x: 0.0001,
+					y:99.9998
+				}
+			},
+			function testLatency(a, b, c){return a * b * c;}
+			];
+			
+			
+			printData(myData,0);			
+		}
+		
+		
+		// print json data from root level
+		function printData(myData,indentionCount){
+			printMe(myData, indentionCount); // pass value and indention 
+			var leng = getLeng(myData);
+			if(leng!=0){
+				loop1(myData,leng);
+			}
+		}
+		
+
+		// loop of json data in node level 1
+		function loop1(rootValue, rootLeng) {
+			var value1, key1, leng1;
+			for(var index1=0;index1<rootLeng;index1++){ 
+				value1 = rootValue[key1 = getKey(rootValue,index1)];
+				printMe(value1, 1); // pass value and indention
+				// check if have child to this node parent
+				leng1 = getLeng(value1);
+				if(leng1!=0){
+					loop2(rootValue, key1, leng1);
+				}
+			}
+		}
+
+		// loop of json data in node level 2
+		function loop2(rootValue, key1, leng1) {
+			var value2, key2, leng2;
+			for(var index2=0;index2<leng1;index2++){ 
+				value2 = rootValue[key1][key2 = getKey(rootValue[key1],index2)];
+				printMe(value2, 2);
+				// check if have child to this node parent
+				leng2 = getLeng(value2);
+				if(leng2!=0){
+					loop3(rootValue, key1, key2, leng2);
+				}
+			}
+		}
+		
+		// loop of json data in node level 3
+		function loop3(rootValue, key1, key2, leng2) {
+			var value3, key3, leng3;
+			for(var index3=0;index3<leng2;index3++){ 
+				value3 = rootValue[key1][key2][key3 = getKey(rootValue[key1][key2],index3)];
+				printMe(value3, 3);
+				// check if have child to this node parent
+				leng3 = getLeng(value3);
+				if(leng3!=0){
+					loop4(rootValue, key1, key2, key3, leng3);
+				}				
+			}
+		}
+
+		// loop of json data in node level 4
+		function loop4(rootValue, key1, key2, key3, leng3) {
+			var value4, key4;
+			for(var index4=0;index4<leng3;index4++){ 
+				value4 = rootValue[key1][key2][key3][key4 = getKey(rootValue[key1][key2][key3],index4)];
+				printMe(value4, 4);  
+			}
+		}
+		
+			function getKey(obj,position){ // get two argument: parent and carrent child position (no position spice)
+				 // In JavaScript, an array is a special type of object, typeof of Array return Object -> 
+				 // so use instanceof and use short IF - ELSE statement to check if is array or regular object
+				 // if an Array -> return index position (number), else if an Object -> return key names (string)
+				 return (obj instanceof Array ? position : Object.keys(obj)[position]);
+			}
+			
+			function getLeng(itemValue) { 
+				if (typeof(itemValue) == "object"){
+					 // if an Array or Object return length, else return 0 (no length)
+					 return (itemValue instanceof Array ? itemValue.length : Object.keys(itemValue).length);
+				}
+				return 0;
+			}
+			
+			
+			function printMe(curruntValue, position){ // not carrent child position, position for spice only
+				// array of spice 
+				var spice = ["", node = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", node+node, node+node+node, node+node+node+node]; // indentation from root				
+				// chack whith type it
+				switch (typeof curruntValue) {
+					case 'object':
+						if (curruntValue instanceof Array){
+							document.write(spice[position] + "This is an Array that has " + curruntValue.length + " elements <br>"); // print Array
+						} else {
+							document.write(spice[position] + "This is an Object and below are his properties <br>"); // print Object
+						}
+					    break;
+					case 'function':
+						document.write(spice[position] + "This is a Function and it's code is " + curruntValue + "<br>"); // print Function
+					    break;				
+					case 'number':
+						document.write(spice[position] + "This is a Number " + curruntValue + "<br>"); // print Number
+					    break;
+					case 'string':
+						document.write(spice[position] + "This is a String " + curruntValue + "<br>"); // print String
+						break;
+					case 'boolean':
+						document.write(spice[position] + "This is a Boolean " + curruntValue + "<br>"); // print Boolean
+					    break;
+					default:
+						document.write(spice[position] + "this a undefine type - typeof: "+ typeof(curruntValue)); // print undefine
+				}
+
+}
+
+		
+
+		</script>
+	</head>
+	<body onload="Start();">
+		
+	</body>
+</html>
